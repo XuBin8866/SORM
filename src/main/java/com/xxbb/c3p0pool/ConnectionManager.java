@@ -24,7 +24,7 @@ public final class ConnectionManager {
 				try {
 					instance=new ConnectionManager();
 				}catch (Exception e) {
-					// TODO: handle exception
+					//
 					e.printStackTrace();
 				}
 			}	
@@ -36,7 +36,7 @@ public final class ConnectionManager {
 		try {
 			conn=dataSource.getConnection();
 		}catch (Exception e) {
-			// TODO: handle exception
+			//
 			e.printStackTrace();
 		}
 		return conn;
