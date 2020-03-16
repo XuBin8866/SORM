@@ -1,14 +1,19 @@
-package com.xxbb.sorm.util;
-
-import com.xxbb.connectionPool1.ConnectionPool;
+package com.xxbb.connectionpool1;
 
 import java.sql.*;
 
 public class JDBCTool {
+    private  static ConnectionPool connectionPool=ConnectionPool.getInstance();
     //获取连接
     public static Connection getConnection(){
-        return ConnectionPool.getInstance().getConnection();
+        return connectionPool.getConnection();
 
+    }
+    //关闭连接
+    public static void closeConnection(Connection conn){
+        if(conn!=null){
+            ConnectionPool.getInstance().returnConnection(conn);
+        }
     }
     public static void closeAll(Connection conn, Statement stat, ResultSet rs){
         closeResultSet(rs);
@@ -20,11 +25,7 @@ public class JDBCTool {
         closePreparedStatement(ps);
         closeConnection(conn);
     }
-    public static void closeConnection(Connection conn){
-        if(conn!=null){
-            ConnectionPool.getInstance().returnConnection(conn);
-        }
-    }
+
     public static void closeStatement(Statement stat){
         if(stat!=null){
             try {

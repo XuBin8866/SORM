@@ -1,4 +1,4 @@
-package com.xxbb.connectionPool1;
+package com.xxbb.connectionpool1;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -89,12 +89,13 @@ public class ConnectionPool {
      */
     private static volatile ConnectionPool instance;
     private ConnectionPool(){
-        //初始化连接池
-        init();
+
         //防止反射破坏单例
         if(instance!=null){
             throw new RuntimeException("Object has been instanced!!!");
         }
+        //初始化连接池
+        init();
     }
     public static ConnectionPool getInstance(){
         //双重检测锁
@@ -183,7 +184,7 @@ public class ConnectionPool {
     /**
      * 自动减少连接
      */
-    private void autoReduce(){
+    private synchronized void autoReduce(){
         if(createdCount>minCount&&conns.size()>0){
             //关闭池中空闲连接
             try {
