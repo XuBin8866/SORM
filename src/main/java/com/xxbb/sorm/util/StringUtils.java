@@ -36,9 +36,10 @@ public class StringUtils {
      * @param str 传入字段
      * @return  下划线改驼峰+首字母大写
      */
-    public static String tableNameToMethodName(String str){
+    public static String columnNameToMethodName(String str){
         return firstCharToUpperCase(lineToHump(str));
     }
+
     /**
      * 将传入字符串的首字母大写
      * @param str 传入字符串
@@ -84,7 +85,7 @@ public class StringUtils {
     }
 
     public static void main(String[] args) {
-        String str=lineToHump("if_back");
+        String str=columnNameToMethodName(humpToLine("ifFreeze"));
         System.out.println(str);
     }
 

@@ -8,6 +8,10 @@ import com.xxbb.sorm.core.MySqlTypeConvertor;
 import com.xxbb.sorm.core.TableContext;
 import com.xxbb.sorm.core.TypeConvertor;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,35 +21,27 @@ import java.util.Map;
  * @author xxbb
  */
 public class JavaFileUtils {
-    /**
-     * 根据字段信息生成java属性信息，如varchar username——>private String username以及它的get，set方法
-     * @param columnInfo 字段信息
-     * @param typeConvertor 类型转化器
-     * @return java属性和get，set方法
-     */
-    public static JavaField createJavaField(ColumnInfo columnInfo, TypeConvertor typeConvertor){
-        JavaField javaField=new JavaField();
-        //获取字段类型有的时候是值是大写的，故在末尾添加toLowerCase()方法
-        String javaFieldType=typeConvertor.databaseTypeToJavaType(columnInfo.getDataType().toLowerCase());
 
-        //构建属性
-        javaField.setFieldInfo("\tprivate "+javaFieldType+" "+StringUtils.lineToHump(columnInfo.getName())+";\n");
-        //构建get方法
-        StringBuilder getStr=new StringBuilder();
-        getStr.append("\tpublic ").append(javaFieldType).append(" get").append(StringUtils.tableNameToMethodName(columnInfo.getName())).append("(){\n");
-        getStr.append("\t\treturn ").append(StringUtils.lineToHump(columnInfo.getName())).append(";\n");
-        getStr.append("\t}\n");
-        javaField.setGetInfo(getStr.toString());
-        //构建set方法
-        StringBuilder setStr=new StringBuilder();
-        setStr.append("\tpublic void").append(" set").append(StringUtils.tableNameToMethodName(columnInfo.getName()));
-        setStr.append("(").append(javaFieldType).append(" ").append(StringUtils.lineToHump(columnInfo.getName())).append("){\n");
-        setStr.append("\t\tthis.").append(StringUtils.lineToHump(columnInfo.getName())).append("=").append(StringUtils.lineToHump(columnInfo.getName())).append(";\n");
-        setStr.append("\t}\n");
-        javaField.setSetInfo(setStr.toString());
+    public static void createJavaPoFile(TableInfo tableInfo,TypeConvertor typeConvertor){
+        String src=createJavaSrc(tableInfo,typeConvertor);
+        String srcPath=DBManager.getConfiguration().getSrcPath();
+        String packagePath=DBManager.getConfiguration().getPoPackage().replaceAll("\\.","\\\\");
+        File poFile=new File(srcPath+"/"+packagePath);
+        if(!poFile.exists()){
+            Boolean flag=poFile.mkdirs();
+        }
 
-
-        return javaField;
+        BufferedWriter bufferedWriter=null;
+        try {
+            File po=new File(srcPath+"/"+packagePath+"/"+
+                    StringUtils.tableNameToClassName(tableInfo.getTableName())+".java");
+            bufferedWriter=new BufferedWriter(new FileWriter(po));
+            bufferedWriter.write(src);
+            bufferedWriter.close();
+            System.out.println("生成了数据库表 "+tableInfo.getTableName()+"的对应类："+StringUtils.tableNameToClassName(tableInfo.getTableName()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -76,6 +72,9 @@ public class JavaFileUtils {
             srcStr.append(j.getFieldInfo());
         }
         srcStr.append("\n");
+        //生成构造方法
+        srcStr.append("\tpublic ").append(StringUtils.tableNameToClassName(tableInfo.getTableName())).append("(){}\n");
+        srcStr.append("\n");
         //生成get方法
         for(JavaField j:javaFieldList){
             srcStr.append(j.getGetInfo());
@@ -92,10 +91,40 @@ public class JavaFileUtils {
 
 
     }
+
+    /**
+     * 根据字段信息生成java属性信息，如varchar username——>private String username以及它的get，set方法
+     * @param columnInfo 字段信息
+     * @param typeConvertor 类型转化器
+     * @return java属性和get，set方法
+     */
+    public static JavaField createJavaField(ColumnInfo columnInfo, TypeConvertor typeConvertor){
+        JavaField javaField=new JavaField();
+        //获取字段类型有的时候是值是大写的，故在末尾添加toLowerCase()方法
+        String javaFieldType=typeConvertor.databaseTypeToJavaType(columnInfo.getDataType().toLowerCase());
+
+        //构建属性
+        javaField.setFieldInfo("\tprivate "+javaFieldType+" "+StringUtils.lineToHump(columnInfo.getName())+";\n");
+        //构建get方法
+        StringBuilder getStr=new StringBuilder();
+        getStr.append("\tpublic ").append(javaFieldType).append(" get").append(StringUtils.columnNameToMethodName(columnInfo.getName())).append("(){\n");
+        getStr.append("\t\treturn ").append(StringUtils.lineToHump(columnInfo.getName())).append(";\n");
+        getStr.append("\t}\n");
+        javaField.setGetInfo(getStr.toString());
+        //构建set方法
+        StringBuilder setStr=new StringBuilder();
+        setStr.append("\tpublic void").append(" set").append(StringUtils.columnNameToMethodName(columnInfo.getName()));
+        setStr.append("(").append(javaFieldType).append(" ").append(StringUtils.lineToHump(columnInfo.getName())).append("){\n");
+        setStr.append("\t\tthis.").append(StringUtils.lineToHump(columnInfo.getName())).append("=").append(StringUtils.lineToHump(columnInfo.getName())).append(";\n");
+        setStr.append("\t}\n");
+        javaField.setSetInfo(setStr.toString());
+
+        return javaField;
+    }
     public static void main(String[] args) {
-        Map<String,TableInfo> map= TableContext.databaseTableMap;
+        Map<String,TableInfo> map= TableContext.getDatabaseTableMap();
         TableInfo t=map.get("t_user");
-        System.out.println(createJavaSrc(t,new MySqlTypeConvertor()));
+        createJavaPoFile(t,new MySqlTypeConvertor());
     }
 
 }

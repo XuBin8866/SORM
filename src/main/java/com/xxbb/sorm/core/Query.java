@@ -19,6 +19,7 @@ public interface Query {
 
     /**
      * 添加一个对象到数据库中
+     * 把对象中不为空的属性存储到数据库中
      * @param obj 要存储的对象
      */
     void insert(Object obj);
@@ -28,7 +29,7 @@ public interface Query {
      * @param clazz 和数据库表对应的class类
      * @param id 主键的值
      */
-    void delete(Class clazz,int id);
+    void delete(Class clazz,Object id);
 
     /**
      * 删除对象在数据库中对应的记录（对象所在的类对应数据库表，对象的主键的值对应到记录）
@@ -43,6 +44,13 @@ public interface Query {
      * @return 受影响的行数
      */
     int update(Object obj,String[] fieldName);
+
+    /**
+     * 更新对象对应的记录,不指定更新字段，条件
+     * @param obj
+     * @return
+     */
+    int update(Object obj);
 
     /**
      * 查询返回多行记录，并且将每行记录封装到clazz指定类的对象中
@@ -64,17 +72,15 @@ public interface Query {
     /**
      * 查询返回一行一列记录，并且将每行记录封装到clazz指定类的对象中
      * @param sql 查询语句
-     * @param clazz 封装数据的javabean类的clazz对象
      * @param params sql参数
      * @return 查询到的结果
      */
-    Object queryValue(String sql,Class clazz,Object[] params);
+    Object queryValue(String sql,Object[] params);
     /**
      * 查询返回一行一列的数字记录，并且将每行记录封装到clazz指定类的对象中
      * @param sql 查询语句
-     * @param clazz 封装数据的javabean类的clazz对象
      * @param params sql参数
      * @return 查询到的结果
      */
-    Number queryNumber(String sql,Class clazz,Object[] params);
+    Number queryNumber(String sql,Object[] params);
 }
