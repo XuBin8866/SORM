@@ -37,10 +37,15 @@ public class Configuration {
      * 当前使用的数据库名称
      */
     private String catalog;
+
+    /**
+     * 当前使用的查询类的路径
+     */
+    private String queryClass;
     public Configuration() {
     }
 
-    public Configuration(String usingDB, String driverClass, String url, String username, String password, String srcPath, String poPackage, String catalog) {
+    public Configuration(String usingDB, String driverClass, String url, String username, String password, String srcPath, String poPackage, String catalog, String queryClass) {
         this.usingDB = usingDB;
         this.driverClass = driverClass;
         this.url = url;
@@ -49,6 +54,7 @@ public class Configuration {
         this.srcPath = srcPath;
         this.poPackage = poPackage;
         this.catalog = catalog;
+        this.queryClass = queryClass;
     }
 
     public String getUsingDB() {
@@ -113,5 +119,13 @@ public class Configuration {
 
     public void setCatalog(String catalog) {
         this.catalog = catalog;
+    }
+
+    public String getQueryClass() {
+        return queryClass;
+    }
+
+    public void setQueryClass(String queryClass) {
+        this.queryClass = queryClass;
     }
 }

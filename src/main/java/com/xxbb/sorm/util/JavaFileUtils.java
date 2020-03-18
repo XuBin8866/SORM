@@ -38,7 +38,7 @@ public class JavaFileUtils {
             bufferedWriter=new BufferedWriter(new FileWriter(po));
             bufferedWriter.write(src);
             bufferedWriter.close();
-            System.out.println("生成了数据库表 "+tableInfo.getTableName()+"的对应类："+StringUtils.tableNameToClassName(tableInfo.getTableName()));
+            System.out.println("更新了数据库表 "+tableInfo.getTableName()+"的对应类："+StringUtils.tableNameToClassName(tableInfo.getTableName()));
         } catch (IOException e) {
             e.printStackTrace();
         }

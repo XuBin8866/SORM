@@ -16,11 +16,12 @@ import java.util.List;
  *
  * @author xxbb
  */
-public abstract class BaseQuery {
+public abstract class BaseQuery implements Cloneable{
 
 
     public Object executeQueryTemplate(String sql, Class clazz, Object[] params, CallBack back) {
         Connection conn = DBManager.getConnection();
+        System.out.println("连接："+conn);
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
@@ -140,7 +141,6 @@ public abstract class BaseQuery {
         Class clazz = obj.getClass();
         //获取表信息
         TableInfo tableInfo = TableContext.getPoClassTableMap().get(clazz);
-        System.out.println(tableInfo);
         //获取主键
         ColumnInfo uniquePrimaryKey = tableInfo.getUniquePrimaryKey();
         //通过反射获取传入对象的主键值
@@ -308,4 +308,15 @@ public abstract class BaseQuery {
     public Number queryNumber(String sql, Object[] params) {
         return (Number) queryValue(sql, params);
     }
+
+    /**
+     * 实现克隆方法
+     * @return 克隆的实例对象
+     * @throws CloneNotSupportedException
+     */
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
 }

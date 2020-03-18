@@ -120,8 +120,8 @@ public class ConnectionPool {
                 createdCount++;
             }
         }
-        System.out.println("初始化完成！！！");
-        System.out.println("连接池可用连接数量："+createdCount);
+        System.out.println("ConnectionPool1初始化------>连接池对象："+this);
+        System.out.println("ConnectionPool1初始化------>连接池可用连接数量："+createdCount);
     }
 
     /**

@@ -75,8 +75,6 @@ public class ConnectionPool {
                 System.out.println("increasingCount使用默认值："+increasingCount);
             }
 
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -94,7 +92,6 @@ public class ConnectionPool {
         if(instance!=null){
             throw new RuntimeException("Object has been instanced!!!");
         }
-        //初始化连接池
         init();
     }
     public static ConnectionPool getInstance(){
@@ -102,6 +99,7 @@ public class ConnectionPool {
         if(null==instance){
             synchronized (ConnectionPool.class){
                 if(null==instance){
+
                     instance=new ConnectionPool();
                 }
             }
@@ -120,8 +118,9 @@ public class ConnectionPool {
                 createdCount++;
             }
         }
-        System.out.println("初始化完成！！！");
-        System.out.println("连接池可用连接数量："+createdCount);
+        System.out.println("连接池连接初始化----->连接池对象："+this);
+        System.out.println("连接池连接初始化----->连接池可用连接数量："+createdCount);
+
     }
 
     /**
@@ -161,7 +160,7 @@ public class ConnectionPool {
      * 获取池中连接
      * @return
      */
-    public Connection getConnection(){
+    public synchronized Connection getConnection(){
         //判断池中是否还有连接
         if(conns.size()>0){
             return conns.removeFirst();
@@ -202,7 +201,7 @@ public class ConnectionPool {
      */
 
     public void returnConnection(Connection conn){
-        System.out.println("归还数据库连接");
+        System.out.println("归还数据库连接："+conn);
         conns.add(conn);
         //归还之后，减少连接
         autoReduce();
@@ -217,6 +216,7 @@ public class ConnectionPool {
 
     public static void main(String[] args) {
         ConnectionPool.getInstance().init();
+
     }
 
 }

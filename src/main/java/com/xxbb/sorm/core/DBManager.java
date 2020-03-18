@@ -29,6 +29,13 @@ public class DBManager {
         configuration.setSrcPath(pros.getProperty("srcPath"));
         configuration.setPoPackage(pros.getProperty("poPackage"));
         configuration.setCatalog(pros.getProperty("catalog"));
+        configuration.setQueryClass(pros.getProperty("queryClass"));
+        //初始化表类映射关系
+        try {
+            Class.forName("com.xxbb.sorm.core.TableContext");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -55,7 +62,7 @@ public class DBManager {
      */
     public static void closeConnection(Connection conn){
         if(conn!=null){
-            com.xxbb.connectionpool1.ConnectionPool.getInstance().returnConnection(conn);
+            ConnectionPool.getInstance().returnConnection(conn);
         }
     }
     public static void closeAll(Connection conn, Statement stat, ResultSet rs){
