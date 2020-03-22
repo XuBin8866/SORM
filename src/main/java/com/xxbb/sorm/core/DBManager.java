@@ -11,31 +11,26 @@ import java.util.Properties;
  * @author xxbb
  */
 public class DBManager {
-    private  static Configuration configuration;
     private  static ConnectionPool connectionPool=ConnectionPool.getInstance();
+    private  static Configuration configuration=ConnectionPool.getInstance().getConfiguration();
     static{
-        Properties pros=new Properties();
-        try {
-            pros.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("db.properties"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        configuration=new Configuration();
-        configuration.setUsingDB(pros.getProperty("usingDB"));
-        configuration.setDriverClass(pros.getProperty("jdbc.driverClass"));
-        configuration.setUrl(pros.getProperty("jdbc.url"));
-        configuration.setUsername(pros.getProperty("jdbc.username"));
-        configuration.setPassword(pros.getProperty("jdbc.password"));
-        configuration.setSrcPath(pros.getProperty("srcPath"));
-        configuration.setPoPackage(pros.getProperty("poPackage"));
-        configuration.setCatalog(pros.getProperty("catalog"));
-        configuration.setQueryClass(pros.getProperty("queryClass"));
         //初始化表类映射关系
         try {
             Class.forName("com.xxbb.sorm.core.TableContext");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+    public static int getIdleCount(){
+        return connectionPool.getIdleCount();
+    }
+
+    /**
+     * 获取已创建连接数
+     * @return 已创建连接数
+     */
+    public static int getCreatedCount(){
+        return connectionPool.getCreatedCount();
     }
 
     /**
@@ -62,7 +57,7 @@ public class DBManager {
      */
     public static void closeConnection(Connection conn){
         if(conn!=null){
-            ConnectionPool.getInstance().returnConnection(conn);
+            connectionPool.returnConnection(conn);
         }
     }
     public static void closeAll(Connection conn, Statement stat, ResultSet rs){

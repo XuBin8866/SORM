@@ -34,9 +34,12 @@ public class TableContext {
     }
 
     static {
+        Connection conn=null;
+        ResultSet tableResultSet=null;
+        ResultSet primaryKeyResultSet=null;
         try {
             //初始化获得表的信息
-            Connection conn = DBManager.getConnection();
+            conn = DBManager.getConnection();
             //获取数据库元数据
             DatabaseMetaData databaseMetaData = conn.getMetaData();
             //获取使用的数据库名称
@@ -52,7 +55,7 @@ public class TableContext {
              * columnNamePattern -列名称模式；
              *                    必须匹配的列名称，因为它是存储在数据库中
              */
-            ResultSet tableResultSet = databaseMetaData.getTables(catalog, "%", "%", new String[]{"TABLE"});
+            tableResultSet = databaseMetaData.getTables(catalog, "%", "%", new String[]{"TABLE"});
             while (tableResultSet.next()) {
                 String tableName = (String) tableResultSet.getObject("TABLE_NAME");
                 TableInfo tableInfo = new TableInfo(tableName, new HashMap<>(), new ArrayList<>());
@@ -66,7 +69,7 @@ public class TableContext {
                 }
 
                 //获取主键
-                ResultSet primaryKeyResultSet = databaseMetaData.getPrimaryKeys(catalog, "%", tableName);
+                primaryKeyResultSet = databaseMetaData.getPrimaryKeys(catalog, "%", tableName);
 
                 while (primaryKeyResultSet.next()) {
                     //设置主键
@@ -81,27 +84,25 @@ public class TableContext {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }finally {
+            DBManager.closeResultSet(primaryKeyResultSet);
+            DBManager.closeResultSet(tableResultSet);
+            DBManager.closeConnection(conn);
         }
 
         //更新类结构
         updateJavaPoFile();
-        //第一次启动程序，生成java文件后，准备将po类与数据库表建立映射关系，提示类找不到
-        //TODO 解决第一次加载无法赋值的问题
-        new Thread(()->{
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            setPoClassTableMap();
-        }).start();
+        //第一次启动程序，第一次生成java文件后，准备将po类与数据库表建立映射关系，提示类找不到
+        //经测试java文件已经生成了采用sleep方法无效
+        //TODO 尚未解决项目第一次加载时第一次执行updateJavaPoFile()生成类文件后，无法建立映射关系的问题=
+        setPoClassTableMap();
 
     }
 
     /**
      * 根据数据库的表结构生成对应的类结构
      */
-    public static void updateJavaPoFile() {
+    public synchronized static void updateJavaPoFile() {
         for (TableInfo t : databaseTableMap.values()) {
             JavaFileUtils.createJavaPoFile(t, new MySqlTypeConvertor());
         }

@@ -8,7 +8,13 @@ import java.util.regex.Pattern;
  * @author xxbb
  */
 public class StringUtils {
+    /**
+     * 正则表达式 用于匹配下划线
+     */
     private static Pattern linePattern = Pattern.compile("_(\\w)");
+    /**
+     * 正则表达式 用于匹配大写字母
+     */
     private static Pattern humpPattern = Pattern.compile("[A-Z]");
 
 
