@@ -100,7 +100,7 @@ public class TableContext {
     }
 
     /**
-     * 根据数据库的表结构生成对应的类结构
+     * 根据数据库的表结构生成对应的类文件
      */
     public synchronized static void updateJavaPoFile() {
         for (TableInfo t : databaseTableMap.values()) {

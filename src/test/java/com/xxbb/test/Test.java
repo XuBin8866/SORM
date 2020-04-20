@@ -4,11 +4,34 @@ import com.xxbb.po.User;
 import com.xxbb.sorm.core.ConnectionPool;
 import com.xxbb.sorm.core.MySqlQuery;
 import com.xxbb.sorm.core.QueryFactory;
+import com.xxbb.sorm.util.StringUtils;
 import com.xxbb.vo.UserVo;
 
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 
 public class Test {
+
+
+    @org.junit.Test
+    public void objectTest(){
+        User u=new User();
+        Class<?> clazz=u.getClass();
+        Object obj=5;
+        Object obj2="5";
+        Method method= null;
+        try {
+            method = clazz.getDeclaredMethod("setIddd",obj.getClass());
+            System.out.println(obj2.getClass());
+            method.invoke(u,obj2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //u.setId(obj);
+        System.out.println(u);
+
+    }
     public static void main(String[] args) {
         long start=System.currentTimeMillis();
         QueryFactory qf=QueryFactory.getInstance();

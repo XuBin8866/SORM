@@ -243,7 +243,6 @@ public abstract class BaseQuery implements Cloneable{
                 while (rs.next()) {
                     //实例化查询结果对应的类
                     Object rowObject = clazz.newInstance();
-
                     //获取查询结果的列数据
                     for (int i = 0; i < resultSetMetaData.getColumnCount(); i++) {
                         //获取列名，从1开始
@@ -283,7 +282,7 @@ public abstract class BaseQuery implements Cloneable{
      * @return 查询到的结果
      */
     public Object queryValue(String sql, Object[] params) {
-        return executeQueryTemplate(sql, null, params, (conn, ps, rs) -> {
+        return executeQueryTemplate(sql, null, params, (Connection conn,PreparedStatement ps, ResultSet rs) -> {
             //获取查询结果，虽然这里用了while，但正确使用这个方法只会返回一行一列的值
             Object res = new Object();
             try {

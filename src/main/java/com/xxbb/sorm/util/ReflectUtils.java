@@ -35,6 +35,7 @@ public class ReflectUtils {
      */
     public static void invokeSet(Object obj,String columnName,Object value){
         Class clazz=obj.getClass();
+        System.out.println("反射时的类："+clazz);
         Method method= null;
         try {
             method = clazz.getDeclaredMethod("set"+ StringUtils.columnNameToMethodName(columnName),value.getClass());

@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Properties;
 
+/**
+ * @author Administrator
+ */
 public class ConnectionPool {
 
     /**
@@ -242,8 +245,6 @@ public class ConnectionPool {
             monitor.notify();
             autoReduce();
         }
-
-
     }
 
     /**
