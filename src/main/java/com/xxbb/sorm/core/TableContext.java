@@ -1,7 +1,6 @@
 package com.xxbb.sorm.core;
 
 import com.xxbb.sorm.bean.ColumnInfo;
-import com.xxbb.sorm.bean.Configuration;
 import com.xxbb.sorm.bean.TableInfo;
 import com.xxbb.sorm.util.JavaFileUtils;
 import com.xxbb.sorm.util.StringUtils;
@@ -65,7 +64,7 @@ public class TableContext {
                     ColumnInfo columnInfo = new ColumnInfo(columnResultSet.getString("COLUMN_NAME"),
                             columnResultSet.getString("TYPE_NAME"),
                             0);
-                    tableInfo.getColums().put(columnResultSet.getString("COLUMN_NAME"), columnInfo);
+                    tableInfo.getColumns().put(columnResultSet.getString("COLUMN_NAME"), columnInfo);
                 }
 
                 //获取主键
@@ -73,7 +72,7 @@ public class TableContext {
 
                 while (primaryKeyResultSet.next()) {
                     //设置主键
-                    ColumnInfo columnInfo2 = (ColumnInfo) tableInfo.getColums().get(primaryKeyResultSet.getString("COLUMN_NAME"));
+                    ColumnInfo columnInfo2 = (ColumnInfo) tableInfo.getColumns().get(primaryKeyResultSet.getString("COLUMN_NAME"));
                     columnInfo2.setKeyType(1);
                     tableInfo.getUnionPrimaryKey().add(columnInfo2);
                 }

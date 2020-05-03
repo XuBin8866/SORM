@@ -52,7 +52,7 @@ public class JavaFileUtils {
      */
     public static String createJavaSrc(TableInfo tableInfo,TypeConvertor typeConvertor){
         //获取所有字段
-        Map<String,ColumnInfo> columnInfoMap=tableInfo.getColums();
+        Map<String,ColumnInfo> columnInfoMap=tableInfo.getColumns();
         //将所有字段转化为javaField的数组
         List<JavaField> javaFieldList=new ArrayList<>();
         for(ColumnInfo c:columnInfoMap.values()){

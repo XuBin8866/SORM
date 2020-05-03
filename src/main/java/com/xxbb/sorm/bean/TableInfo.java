@@ -15,7 +15,7 @@ public class TableInfo {
     /**
      * 所有字段信息
      */
-    private Map<String,ColumnInfo> colums;
+    private Map<String,ColumnInfo> columns;
     /**
      * 唯一主键(目前只考虑表中只有一个主键的情况)
      */
@@ -28,15 +28,15 @@ public class TableInfo {
     public TableInfo() {
     }
 
-    public TableInfo(String tableName, Map<String, ColumnInfo> colums, ColumnInfo uniquePrimaryKey) {
+    public TableInfo(String tableName, Map<String, ColumnInfo> columns, ColumnInfo uniquePrimaryKey) {
         this.tableName = tableName;
-        this.colums = colums;
+        this.columns = columns;
         this.uniquePrimaryKey = uniquePrimaryKey;
     }
 
-    public TableInfo(String tableName, Map<String, ColumnInfo> colums,List<ColumnInfo> unionPrimaryKey) {
+    public TableInfo(String tableName, Map<String, ColumnInfo> columns, List<ColumnInfo> unionPrimaryKey) {
         this.tableName = tableName;
-        this.colums = colums;
+        this.columns = columns;
         this.unionPrimaryKey = unionPrimaryKey;
     }
 
@@ -48,12 +48,12 @@ public class TableInfo {
         this.tableName = tableName;
     }
 
-    public Map<String, ColumnInfo> getColums() {
-        return colums;
+    public Map<String, ColumnInfo> getColumns() {
+        return columns;
     }
 
-    public void setColums(Map<String, ColumnInfo> colums) {
-        this.colums = colums;
+    public void setColumns(Map<String, ColumnInfo> columns) {
+        this.columns = columns;
     }
 
     public ColumnInfo getUniquePrimaryKey() {

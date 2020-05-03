@@ -14,7 +14,7 @@ public class QueryFactory {
      * 天然线程安全，延时加载
      */
     private static class Instance{
-        private static QueryFactory instance=new QueryFactory();
+        private static final QueryFactory INSTANCE =new QueryFactory();
     }
 
     //读取配置文件中的查询类
@@ -35,7 +35,7 @@ public class QueryFactory {
      * @return 工厂对象
      */
     public static QueryFactory getInstance(){
-        return Instance.instance;
+        return Instance.INSTANCE;
     }
     /**
      * 获取查询类

@@ -22,7 +22,7 @@ public class Test {
         Object obj2="5";
         Method method= null;
         try {
-            method = clazz.getDeclaredMethod("setIddd",obj.getClass());
+            method = clazz.getDeclaredMethod("setId",obj.getClass());
             System.out.println(obj2.getClass());
             method.invoke(u,obj2);
         } catch (Exception e) {
@@ -46,8 +46,10 @@ public class Test {
             queryTest(mq);
         }
     }
-
-    public static void queryValueTest(MySqlQuery mq){
+    @org.junit.Test
+    public void queryValueTest(){
+        QueryFactory qf=QueryFactory.getInstance();
+        MySqlQuery mq= (MySqlQuery) qf.createQuery();
         User u = new User();
         u.setId(3);
         u.setUsername("xxbb");
